@@ -56,7 +56,7 @@ class ContractItem
         return $this->signedAt;
     }
 
-    public function setSignedAt(?int $signedAt): self
+    public function setSignedAt(?DateTimeImmutable $signedAt): self
     {
         $this->signedAt = $signedAt;
 

@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// toast.configure();
+import '../lib/materialize.css';
+import {path} from '../index';
 
 export default class InputProduct extends Component{
     constructor(props) {
@@ -17,23 +18,13 @@ export default class InputProduct extends Component{
         this.handleChangeRateLimit = this.handleChangeRateLimit.bind(this);
         this.handleChangePrice = this.handleChangePrice.bind(this);
         this.postProductData = this.postProductData.bind(this);
-        this.onSuccess = this.onSuccess.bind(this);
-        this.onError = this.onError.bind(this);
 
     }
 
-    componentDidMount() {
-
-    }
-    post = () => {
-        this.postProductData()
-            .then(this.onSuccess)
-            .catch(this.onError);
-    }
     async postProductData() {
         let product = JSON.stringify(this.state);
 
-        let response = await fetch('https://127.0.0.1:8000/api/v1/product', {
+        let response = await fetch(path + 'product', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -41,21 +32,15 @@ export default class InputProduct extends Component{
             body: product
         });
         let result = await response.json();
-        console.log(result);
-        alert(result);
 
-        // if (!response.ok) {
-        //     throw new Error (`Error, ${result}`)
-        // }
-        return result;
-    }
-
-    onSuccess = (data) => {
-
-    }
-
-    onError = (error) => {
-
+        if (!response.ok) {
+            toast.error(result);
+            this.setState(JSON.parse(product))
+        }
+        else {
+            toast.success('Success!');
+            this.setState(result);
+        }
     }
 
     handleChangeName(event) {
@@ -78,36 +63,61 @@ export default class InputProduct extends Component{
     render () {
         return (
             <div>
+                <ToastContainer />
                 <li className="collection-header"><h4>Ввод тарифного плана</h4></li>
                 <div className="row">
-                    <form className="col s6">
+                    <div className="col s6">
 
                         <div className="row">
                             <div className="input-field col s12">
-                                <input id="name" type="text" className="validate" value={this.state.name} onChange={this.handleChangeName}></input>
-                                <label htmlFor="name">Краткое наименование</label>
+                                <input
+                                    id="name"
+                                    type="text"
+                                    className="validate"
+                                    placeholder="Краткое наименование"
+                                    value={this.state.name}
+                                    onChange={this.handleChangeName}>
+                                </input>
                             </div>
                         </div>
                         <div className="row">
                             <div className="input-field col s12">
-                                <input id="fullName" type="text" className="validate" value={this.state.fullName} onChange={this.handleChangeFullName}></input>
-                                <label htmlFor="fullName">Полное наименование</label>
+                                <input
+                                    id="fullName"
+                                    type="text"
+                                    className="validate"
+                                    placeholder="Полное наименование"
+                                    value={this.state.fullName}
+                                    onChange={this.handleChangeFullName}>
+                                </input>
                             </div>
                         </div>
                         <div className="row">
                             <div className="input-field col s6">
-                                <input id="rateLimit" type="text" className="validate" value={this.state.rateLimit} onChange={this.handleChangeRateLimit}></input>
-                                <label htmlFor="rateLimit">Скорость</label>
+                                <input
+                                    id="rateLimit"
+                                    type="number"
+                                    className="validate"
+                                    placeholder="Скорость"
+                                    value={this.state.rateLimit}
+                                    onChange={this.handleChangeRateLimit}>
+                                </input>
                             </div>
                             <div className="input-field col s6">
-                                <input id="price" type="text" className="validate" value={this.state.price} onChange={this.handleChangePrice}></input>
-                                <label htmlFor="price">Стоимость</label>
+                                <input
+                                    id="price"
+                                    type="number"
+                                    className="validate"
+                                    placeholder="Стоимость"
+                                    value={this.state.price}
+                                    onChange={this.handleChangePrice}>
+                                </input>
                             </div>
                         </div>
 
-                        <button className="btn waves-effect waves-light" type="submit" name="action" onClick={ () => this.postProductData() }>Submit</button>
+                        <button className="btn waves-effect waves-light" name="action" onClick={ () => this.postProductData() }>Submit</button>
 
-                    </form>
+                    </div>
                 </div>
 
             </div>

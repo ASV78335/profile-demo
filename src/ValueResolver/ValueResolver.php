@@ -15,6 +15,10 @@ use Throwable;
 class ValueResolver implements ValueResolverInterface
 {
     private array $acceptedValues = [
+        'App\Model\RequestAddress',
+        'App\Model\RequestDate',
+        'App\Model\RequestPeriod',
+        'App\Model\RequestProduct',
         'App\Model\ContractCreateUpdate',
         'App\Model\ProductCreateUpdate',
         'App\Model\SubscriberCreateUpdate'

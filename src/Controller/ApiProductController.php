@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Product;
+use App\Exception\BusinessLogicException;
 use App\Model\ProductCreateUpdate;
 use App\Model\ProductList;
 use App\Repository\ProductRepository;
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
+use Throwable;
 
 class ApiProductController extends AbstractController
 {
@@ -42,19 +44,27 @@ class ApiProductController extends AbstractController
     #[Route('/api/v1/product', methods: ['POST'])]
     public function create(ProductCreateUpdate $request): Response
     {
-        $product = new Product();
-        $result = $product::fromCreateRequest($request);
-        $this->repository->save($result);
-        return $this->json($result);
+        try {
+            $product = new Product();
+            $result = $product::fromCreateRequest($request);
+            $this->repository->save($result);
+            return $this->json($result);
+        } catch (Throwable $throwable) {
+            throw new BusinessLogicException('Ошибка сохранения:' . $throwable->getMessage());
+        }
     }
 
 
     #[Route('/api/v1/product/{uuid}', methods: ['POST'])]
     public function update(Uuid $uuid, ProductCreateUpdate $request): Response
     {
-        $product = $this->repository->findOneBy(['uuid' => $uuid]);
-        $result = $product::fromUpdateRequest($product, $request);
-        $this->repository->save($result);
-        return $this->json($result);
+        try {
+            $product = $this->repository->findOneBy(['uuid' => $uuid]);
+            $result = $product::fromUpdateRequest($product, $request);
+            $this->repository->save($result);
+            return $this->json($result);
+        } catch (Throwable $throwable) {
+            throw new BusinessLogicException('Ошибка сохранения:' . $throwable->getMessage());
+        }
     }
 }

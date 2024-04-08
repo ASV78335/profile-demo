@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Range;
 
 class SubscriberCreateUpdate
 {
@@ -42,24 +41,24 @@ class SubscriberCreateUpdate
         return $this;
     }
 
-    public function getHouse(): ?int
+    public function getHouse(): ?string
     {
         return $this->house;
     }
 
-    public function setHouse(?int $house): self
+    public function setHouse(?string $house): self
     {
         $this->house = $house;
 
         return $this;
     }
 
-    public function getApartment(): ?int
+    public function getApartment(): ?string
     {
         return $this->apartment;
     }
 
-    public function setApartment(?int $apartment): self
+    public function setApartment(?string $apartment): self
     {
         $this->apartment = $apartment;
 

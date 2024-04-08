@@ -12,3 +12,6 @@ root.render(
         </HashRouter>
     </React.StrictMode>
 );
+
+export const path = 'https://127.0.0.1:8000/api/v1/';
+
